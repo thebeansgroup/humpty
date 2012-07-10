@@ -1,0 +1,63 @@
+#!/usr/bin/php
+<?php
+/**
+ * Command-line interface to the Humpty client 
+ */
+
+require_once('lib/HumptyAutoloader.php');
+HumptyAutoloader::register();
+
+ini_set('mbstring.func_overload', '0');
+ini_set('output_handler', '');
+error_reporting(E_ALL | E_STRICT);
+@ob_end_flush();
+set_time_limit(0);
+
+$shortOpts = 'p:a:h:';
+$longOpts = array('project:', 'action:', 'header:'); 
+
+$options = getopt($shortOpts, $longOpts);
+
+if (!isset($options['p']) || 
+  is_array($options['p']) || 
+  empty($options['p']) ||
+  !isset($options['a']) || 
+  is_array($options['a']) || 
+  empty($options['a']))
+{
+  showHelp();
+}
+
+$project = $options['p'];
+$action = $options['a'];
+
+if (isset($options['h']))
+{
+  $parameters = is_array($options['h']) ? $options['h'] : array($options['h']);
+}
+else
+{
+  $parameters = array();
+}
+
+/*** create client and dispatch commands ***/
+$client = new HumptyClient();
+$client->dispatch($project, $action, $parameters);
+
+/**
+ * Shows a usage message then exits
+ * 
+ * @return unknown_type
+ */
+function showHelp()
+{
+  echo <<< EOF
+Command line client for communicating with Humpty servers.
+Usage: humpty -p project_name -a action_name [-h header in the format name:value]
+
+Multiple '-h' options may be supplied in a single invocation.
+ 
+EOF;
+
+  exit;
+}

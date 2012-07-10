@@ -1,0 +1,14 @@
+#!/usr/bin/php
+<?php
+/**
+ * Command-line interface for launching the Humpty server daemon
+ */
+
+require_once('lib/HumptyAutoloader.php');
+HumptyAutoloader::register();
+
+// initialise and start the server
+$server = new HumptyServer();
+
+echo "Humpty initialised. Daemonising...\n";
+$server->daemonise();

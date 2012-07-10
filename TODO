@@ -1,0 +1,8 @@
+invoking the client repeatedly in quick succession throws an error when it tries to bind to the port. the
+servers are waiting, trying to communicate with it. how can i force the port to be closed, so anything
+connected to it will get a connection refused message?
+____________
+
+uncomment SymfonyHumptyUtils::WEB_ROOT so it points to the right web root
+
+test and uncomment the 'rm' commands in the engines
